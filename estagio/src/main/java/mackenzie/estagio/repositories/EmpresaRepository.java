@@ -7,4 +7,6 @@ public interface EmpresaRepository extends CrudRepository<Empresa, Long> {
     
     Empresa findByCnpj(String cnpj);
     
+    Empresa findByUsuarioEmail(String email);
+    
 }

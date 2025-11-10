@@ -11,6 +11,12 @@ public interface VagaEstagioRepository extends CrudRepository<VagaEstagio, Long>
     
     List<VagaEstagio> findByEmpresaId(Long empresaId);
     
-    List<VagaEstagio> findByAreaInteresseInAndEncerradaFalse(List<AreaInteresse> areasInteresse);
+    List<VagaEstagio> findByAreasInteresseInAndEncerradaFalse(List<AreaInteresse> areasInteresse);
+    
+    List<VagaEstagio> findByEmpresaIdAndEncerradaFalse(Long empresaId);
+    
+    Long countByEncerradaFalse();
+    
+    Long countByEncerradaTrue();
     
 }

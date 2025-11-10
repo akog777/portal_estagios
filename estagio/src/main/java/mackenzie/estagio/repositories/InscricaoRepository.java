@@ -12,4 +12,6 @@ public interface InscricaoRepository extends CrudRepository<Inscricao, Long> {
     
     boolean existsByEstudanteIdAndVagaEstagioId(Long estudanteId, Long vagaId);
     
+    List<Inscricao> findByVagaEstagioEmpresaId(Long empresaId);
+    
 }
