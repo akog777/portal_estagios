@@ -13,6 +13,7 @@ import mackenzie.estagio.entities.Empresa;
 import mackenzie.estagio.entities.Usuario;
 import mackenzie.estagio.repositories.EmpresaRepository;
 import mackenzie.estagio.repositories.UsuarioRepository;
+import mackenzie.estagio.services.UsuarioService;
 
 @RestController
 @RequestMapping("/api/empresas")
@@ -24,6 +25,9 @@ public class EmpresaController {
     
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     @GetMapping
     public ResponseEntity<List<Empresa>> getAllEmpresas() {
@@ -68,7 +72,7 @@ public class EmpresaController {
         // Salvar usuário primeiro
         if (empresa.getUsuario() != null) {
             empresa.getUsuario().setTipo(Usuario.TipoUsuario.EMPRESA);
-            usuarioRepository.save(empresa.getUsuario());
+            usuarioService.salvarUsuario(empresa.getUsuario());
         }
         
         Empresa savedEmpresa = empresaRepository.save(empresa);

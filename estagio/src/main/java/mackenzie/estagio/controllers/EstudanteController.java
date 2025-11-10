@@ -13,6 +13,8 @@ import mackenzie.estagio.entities.Estudante;
 import mackenzie.estagio.entities.Usuario;
 import mackenzie.estagio.repositories.EstudanteRepository;
 import mackenzie.estagio.repositories.UsuarioRepository;
+import mackenzie.estagio.services.PdfService;
+import mackenzie.estagio.services.UsuarioService;
 
 @RestController
 @RequestMapping("/api/estudantes")
@@ -24,6 +26,12 @@ public class EstudanteController {
     
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private PdfService pdfService;
 
     @GetMapping
     public ResponseEntity<List<Estudante>> getAllEstudantes() {
@@ -68,7 +76,7 @@ public class EstudanteController {
         // Salvar usuário primeiro
         if (estudante.getUsuario() != null) {
             estudante.getUsuario().setTipo(Usuario.TipoUsuario.ESTUDANTE);
-            usuarioRepository.save(estudante.getUsuario());
+            usuarioService.salvarUsuario(estudante.getUsuario());
         }
         
         Estudante savedEstudante = estudanteRepository.save(estudante);
@@ -101,5 +109,24 @@ public class EstudanteController {
         }
         estudanteRepository.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/curriculo/pdf")
+    public ResponseEntity<byte[]> gerarCurriculoPdf(@PathVariable Long id) {
+        Estudante estudante = estudanteRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Estudante não encontrado com id: " + id));
+
+        try {
+            byte[] pdfBytes = pdfService.gerarCurriculoPdf(estudante);
+
+            return ResponseEntity.ok()
+                .header("Content-Type", "application/pdf")
+                .header("Content-Disposition", "attachment; filename=curriculo_" + estudante.getNome().replaceAll("\\s+", "_") + ".pdf")
+                .body(pdfBytes);
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao gerar currículo PDF: " + e.getMessage());
+        }
     }
 }

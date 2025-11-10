@@ -14,6 +14,7 @@ import mackenzie.estagio.repositories.UsuarioRepository;
 import mackenzie.estagio.repositories.AdministradorRepository;
 import mackenzie.estagio.repositories.EmpresaRepository;
 import mackenzie.estagio.repositories.EstudanteRepository;
+import mackenzie.estagio.services.UsuarioService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,15 +26,18 @@ public class AuthController {
     
     @Autowired
     private UsuarioRepository usuarioRepository;
-    
+
     @Autowired
     private AdministradorRepository adminRepository;
-    
+
     @Autowired
     private EmpresaRepository empresaRepository;
-    
+
     @Autowired
     private EstudanteRepository estudanteRepository;
+
+    @Autowired
+    private UsuarioService usuarioService;
     
     // Classe auxiliar para receber dados de login
     public static class LoginRequest {
@@ -50,25 +54,24 @@ public class AuthController {
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest loginRequest) {
         // Buscar usuário por email
         Usuario usuario = usuarioRepository.findByEmail(loginRequest.getEmail());
-        
+
         if (usuario == null) {
             throw new ResponseStatusException(
                 HttpStatus.UNAUTHORIZED, "Email ou senha inválidos");
         }
-        
-        // NOTA: Em produção, usar BCrypt para comparar senhas!
-        // Exemplo: if (!passwordEncoder.matches(loginRequest.getSenha(), usuario.getSenha()))
-        if (!usuario.getSenha().equals(loginRequest.getSenha())) {
+
+        // Verificar senha usando BCrypt
+        if (!usuarioService.verificarSenha(loginRequest.getSenha(), usuario.getSenha())) {
             throw new ResponseStatusException(
                 HttpStatus.UNAUTHORIZED, "Email ou senha inválidos");
         }
-        
+
         // Buscar dados específicos do perfil
         Map<String, Object> response = new HashMap<>();
         response.put("tipo", usuario.getTipo());
         response.put("email", usuario.getEmail());
         response.put("usuarioId", usuario.getId());
-        
+
         switch (usuario.getTipo()) {
             case ADMINISTRADOR:
                 Administrador admin = adminRepository.findByUsuarioEmail(usuario.getEmail());
@@ -77,7 +80,7 @@ public class AuthController {
                     response.put("nome", admin.getNome());
                 }
                 break;
-                
+
             case EMPRESA:
                 Empresa empresa = empresaRepository.findByUsuarioEmail(usuario.getEmail());
                 if (empresa != null) {
@@ -86,7 +89,7 @@ public class AuthController {
                     response.put("cnpj", empresa.getCnpj());
                 }
                 break;
-                
+
             case ESTUDANTE:
                 Estudante estudante = estudanteRepository.findByUsuarioEmail(usuario.getEmail());
                 if (estudante != null) {
@@ -96,7 +99,14 @@ public class AuthController {
                 }
                 break;
         }
-        
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Map<String, String>> logout() {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Logout realizado com sucesso");
         return ResponseEntity.ok(response);
     }
     

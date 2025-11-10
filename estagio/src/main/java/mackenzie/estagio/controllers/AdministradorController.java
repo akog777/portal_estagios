@@ -18,6 +18,7 @@ import mackenzie.estagio.repositories.UsuarioRepository;
 import mackenzie.estagio.repositories.EmpresaRepository;
 import mackenzie.estagio.repositories.EstudanteRepository;
 import mackenzie.estagio.repositories.VagaEstagioRepository;
+import mackenzie.estagio.services.UsuarioService;
 
 @RestController
 @RequestMapping("/api/administradores")
@@ -38,6 +39,9 @@ public class AdministradorController {
     
     @Autowired
     private VagaEstagioRepository vagaRepository;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     @GetMapping
     public ResponseEntity<List<Administrador>> getAllAdministradores() {
@@ -66,7 +70,7 @@ public class AdministradorController {
         // Salvar usuário primeiro
         if (admin.getUsuario() != null) {
             admin.getUsuario().setTipo(Usuario.TipoUsuario.ADMINISTRADOR);
-            usuarioRepository.save(admin.getUsuario());
+            usuarioService.salvarUsuario(admin.getUsuario());
         }
         
         Administrador savedAdmin = adminRepository.save(admin);
