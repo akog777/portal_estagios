@@ -1,10 +1,10 @@
 package mackenzie.estagio.repositories;
 
 import org.springframework.data.repository.CrudRepository;
+import mackenzie.estagio.entities.Usuario;
 
-import br.mack.estagios.model.Empresa;
-import br.mack.estagios.model.Usuario;
-
-public interface UsuarioRepository extends CrudRepository<Usuario, Long>{
-
+public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
+    
+    Usuario findByEmail(String email);
+    
 }

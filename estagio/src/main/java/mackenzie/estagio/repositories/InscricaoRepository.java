@@ -1,10 +1,15 @@
 package mackenzie.estagio.repositories;
 
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
+import mackenzie.estagio.entities.Inscricao;
 
-import br.mack.estagios.model.Empresa;
-import br.mack.estagios.model.Inscricao;
-
-public interface InscricaoRepository extends CrudRepository<Inscricao, Long>{
-
+public interface InscricaoRepository extends CrudRepository<Inscricao, Long> {
+    
+    List<Inscricao> findByVagaEstagioId(Long vagaId);
+    
+    List<Inscricao> findByEstudanteId(Long estudanteId);
+    
+    boolean existsByEstudanteIdAndVagaEstagioId(Long estudanteId, Long vagaId);
+    
 }

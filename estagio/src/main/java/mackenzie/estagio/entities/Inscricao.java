@@ -1,48 +1,90 @@
 package mackenzie.estagio.entities;
 
+import jakarta.persistence.*;
 import java.util.Date;
-import java.util.List;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"estudante_id", "vaga_estagio_id"}))
 public class Inscricao {
-    @Id @GeneratedValue
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
     private Date dataInscricao;
-    private int status;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatusInscricao status;
+    
+    @ManyToOne
+    @JoinColumn(name = "estudante_id", nullable = false)
+    private Estudante estudante;
+    
+    @ManyToOne
+    @JoinColumn(name = "vaga_estagio_id", nullable = false)
     private VagaEstagio vagaEstagio;
-    private List<Estudante> estudantes;
+    
+    // Construtores
+    public Inscricao() {
+        this.dataInscricao = new Date();
+        this.status = StatusInscricao.PENDENTE;
+    }
+    
+    public Inscricao(Estudante estudante, VagaEstagio vagaEstagio) {
+        this();
+        this.estudante = estudante;
+        this.vagaEstagio = vagaEstagio;
+    }
+    
+    // Getters e Setters
     public Long getId() {
         return id;
     }
+    
     public void setId(Long id) {
         this.id = id;
     }
+    
     public Date getDataInscricao() {
         return dataInscricao;
     }
+    
     public void setDataInscricao(Date dataInscricao) {
         this.dataInscricao = dataInscricao;
     }
-    public int getStatus() {
+    
+    public StatusInscricao getStatus() {
         return status;
     }
-    public void setStatus(int status) {
+    
+    public void setStatus(StatusInscricao status) {
         this.status = status;
     }
+    
+    public Estudante getEstudante() {
+        return estudante;
+    }
+    
+    public void setEstudante(Estudante estudante) {
+        this.estudante = estudante;
+    }
+    
     public VagaEstagio getVagaEstagio() {
         return vagaEstagio;
     }
+    
     public void setVagaEstagio(VagaEstagio vagaEstagio) {
         this.vagaEstagio = vagaEstagio;
     }
-    public List<Estudante> getEstudantes() {
-        return estudantes;
-    }
-    public void setEstudantes(List<Estudante> estudantes) {
-        this.estudantes = estudantes;
+    
+    // Enum para status da inscrição
+    public enum StatusInscricao {
+        PENDENTE,
+        EM_ANALISE,
+        APROVADA,
+        RECUSADA,
+        CANCELADA
     }
 }

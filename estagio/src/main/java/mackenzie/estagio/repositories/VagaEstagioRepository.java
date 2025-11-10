@@ -1,10 +1,16 @@
 package mackenzie.estagio.repositories;
 
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
+import mackenzie.estagio.entities.VagaEstagio;
+import mackenzie.estagio.entities.AreaInteresse;
 
-import br.mack.estagios.model.Empresa;
-import br.mack.estagios.model.VagaEstagio;
-
-public interface VagaEstagioRepository extends CrudRepository<VagaEstagio, Long>{
-
+public interface VagaEstagioRepository extends CrudRepository<VagaEstagio, Long> {
+    
+    List<VagaEstagio> findByEncerradaFalse();
+    
+    List<VagaEstagio> findByEmpresaId(Long empresaId);
+    
+    List<VagaEstagio> findByAreaInteresseInAndEncerradaFalse(List<AreaInteresse> areasInteresse);
+    
 }
