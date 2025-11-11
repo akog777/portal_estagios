@@ -1,23 +1,15 @@
 package mackenzie.estagio.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.server.*;
 
-import mackenzie.estagio.entities.Usuario;
-import mackenzie.estagio.entities.Administrador;
-import mackenzie.estagio.entities.Empresa;
-import mackenzie.estagio.entities.Estudante;
-import mackenzie.estagio.repositories.UsuarioRepository;
-import mackenzie.estagio.repositories.AdministradorRepository;
-import mackenzie.estagio.repositories.EmpresaRepository;
-import mackenzie.estagio.repositories.EstudanteRepository;
-import mackenzie.estagio.services.UsuarioService;
+import mackenzie.estagio.entities.*;
+import mackenzie.estagio.repositories.*;
+import mackenzie.estagio.services.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/auth")

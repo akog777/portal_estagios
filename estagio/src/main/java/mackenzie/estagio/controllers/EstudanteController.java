@@ -1,20 +1,15 @@
 package mackenzie.estagio.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.server.*;
 
-import mackenzie.estagio.entities.Estudante;
-import mackenzie.estagio.entities.Usuario;
-import mackenzie.estagio.repositories.EstudanteRepository;
-import mackenzie.estagio.repositories.UsuarioRepository;
-import mackenzie.estagio.services.PdfService;
-import mackenzie.estagio.services.UsuarioService;
+import mackenzie.estagio.entities.*;
+import mackenzie.estagio.repositories.*;
+import mackenzie.estagio.services.*;
 
 @RestController
 @RequestMapping("/api/estudantes")

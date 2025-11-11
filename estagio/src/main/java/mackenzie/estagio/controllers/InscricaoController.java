@@ -1,18 +1,14 @@
 package mackenzie.estagio.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.server.*;
 
-import mackenzie.estagio.entities.Inscricao;
-import mackenzie.estagio.entities.VagaEstagio;
-import mackenzie.estagio.repositories.InscricaoRepository;
-import mackenzie.estagio.repositories.VagaEstagioRepository;
+import mackenzie.estagio.entities.*;
+import mackenzie.estagio.repositories.*;
 
 @RestController
 @RequestMapping("/api/inscricoes")
