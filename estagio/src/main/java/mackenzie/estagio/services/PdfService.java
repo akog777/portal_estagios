@@ -3,7 +3,9 @@ package mackenzie.estagio.services;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.springframework.stereotype.Service;
 
 import mackenzie.estagio.entities.Estudante;
@@ -21,14 +23,18 @@ public class PdfService {
             PDPage page = new PDPage();
             document.addPage(page);
 
+            // Criar fontes usando Standard14Fonts (fontes embutidas do PDF)
+            PDFont fonteBold = new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD);
+            PDFont fonteRegular = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
+
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 18);
+                contentStream.setFont(fonteBold, 18);
                 contentStream.beginText();
                 contentStream.newLineAtOffset(50, 750);
                 contentStream.showText("CURRÍCULO - " + estudante.getNome().toUpperCase());
                 contentStream.endText();
 
-                contentStream.setFont(PDType1Font.HELVETICA, 12);
+                contentStream.setFont(fonteRegular, 12);
                 float yPosition = 700;
 
                 // Informações pessoais
@@ -65,13 +71,13 @@ public class PdfService {
 
                 // Áreas de interesse
                 yPosition -= 40;
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+                contentStream.setFont(fonteBold, 14);
                 contentStream.beginText();
                 contentStream.newLineAtOffset(50, yPosition);
                 contentStream.showText("ÁREAS DE INTERESSE");
                 contentStream.endText();
 
-                contentStream.setFont(PDType1Font.HELVETICA, 12);
+                contentStream.setFont(fonteRegular, 12);
                 List<AreaInteresse> areas = estudante.getAreasInteresse();
                 if (areas != null && !areas.isEmpty()) {
                     for (AreaInteresse area : areas) {
@@ -82,7 +88,7 @@ public class PdfService {
                             document.addPage(newPage);
                             contentStream.close();
                             PDPageContentStream newContentStream = new PDPageContentStream(document, newPage);
-                            newContentStream.setFont(PDType1Font.HELVETICA, 12);
+                            newContentStream.setFont(fonteRegular, 12);
                             newContentStream.beginText();
                             newContentStream.newLineAtOffset(50, 750);
                             newContentStream.showText("• " + area.getTitulo());
@@ -106,13 +112,13 @@ public class PdfService {
                 // Informações adicionais
                 yPosition -= 40;
                 if (yPosition > 100) {
-                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+                    contentStream.setFont(fonteBold, 14);
                     contentStream.beginText();
                     contentStream.newLineAtOffset(50, yPosition);
                     contentStream.showText("EXPERIÊNCIA PROFISSIONAL");
                     contentStream.endText();
 
-                    contentStream.setFont(PDType1Font.HELVETICA, 12);
+                    contentStream.setFont(fonteRegular, 12);
                     yPosition -= 20;
                     contentStream.beginText();
                     contentStream.newLineAtOffset(50, yPosition);
